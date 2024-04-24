@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.9.0-20240410-095500-2653a74d"
+distribution-version = "2201.9.0-20240419-152500-bd530dd2"
 
 [[package]]
 org = "ballerina"
@@ -369,7 +369,7 @@ modules = [
 
 [[package]]
 org = "thisaru"
-name = "movie_database"
+name = "movie_rating_system"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
@@ -382,7 +382,7 @@ dependencies = [
 	{org = "ballerinax", name = "mongodb"}
 ]
 modules = [
-	{org = "thisaru", packageName = "movie_database", moduleName = "movie_database"},
-	{org = "thisaru", packageName = "movie_database", moduleName = "movie_database.datasource"}
+	{org = "thisaru", packageName = "movie_rating_system", moduleName = "movie_rating_system"},
+	{org = "thisaru", packageName = "movie_rating_system", moduleName = "movie_rating_system.datasource"}
 ]
 

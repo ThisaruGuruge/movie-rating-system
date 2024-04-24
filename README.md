@@ -43,19 +43,19 @@ This will generate a `schema_service.graphql` file in the root directory of the 
 2. Navigate to the cloned repository.
 
     ```bash
-    cd ballerina-movie-rating-system-graphql-mongodb
+    cd movie-rating-system
     ```
 
 3. Add the `Config.toml` file to the root directory of the project with the following content. You can change the configurations as needed.
 
     ```toml
-    [movie_database]
+    [movie_rating_system]
     enableGraphiql = true # To enable GraphiQL interface. This should be disabled in a production environment
     enableIntrospection = true # To enable introspection queries. This should be disabled in a production environment
     maxQueryDepth = 15 # maximum depth of a query. This should be reduced to a lower value in a production environment
     initDatabase = true # if true, the database will be initialized with some data
 
-    [movie_database.datasource]
+    [movie_rating_system.datasource]
     username = "admin" # MongoDB username
     password = "admin" # MongoDB password
     ```

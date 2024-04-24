@@ -1,4 +1,4 @@
-import movie_database.datasource;
+import movie_rating_system.datasource;
 
 import ballerina/constraint;
 import ballerina/graphql;
@@ -130,16 +130,10 @@ public isolated service class User {
     @graphql:ResourceConfig {
         cacheConfig: {
             enabled: false
-        }
+        },
+        interceptors: new AdminAuthInterceptor()
     }
-    isolated resource function get email(graphql:Context context) returns string|error? {
-        UserRecord|error user = context.get(USER).ensureType();
-        if user is error {
-            return error("Error validating the user");
-        }
-        check validateUserRole(user, "admin");
-        return self.email;
-    }
+    isolated resource function get email(graphql:Context context) returns string? => self.email;
 }
 
 # Represents a Review in the movie database.
@@ -264,3 +258,29 @@ type MoviesOfDirector record {|
     string _id;
     MovieRecord[] movies;
 |};
+
+readonly service class AdminAuthInterceptor {
+    *graphql:Interceptor;
+
+    isolated remote function execute(graphql:Context context, graphql:Field 'field) returns anydata|error {
+        UserRecord? user = check context.get(USER).ensureType();
+        if user is () {
+            return error("Unauthorized access to the resource");
+        }
+        check validateUserRole(user, "admin");
+        return context.resolve('field);
+    }
+}
+
+readonly service class UserAuthInterceptor {
+    *graphql:Interceptor;
+
+    isolated remote function execute(graphql:Context context, graphql:Field 'field) returns anydata|error {
+        UserRecord? user = check context.get(USER).ensureType();
+        if user is () {
+            return error("Unauthorized access to the resource");
+        }
+        check validateUserRole(user, "user");
+        return context.resolve('field);
+    }
+}

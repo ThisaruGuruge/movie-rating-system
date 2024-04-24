@@ -1,4 +1,4 @@
-import movie_database.datasource;
+import movie_rating_system.datasource;
 
 import ballerina/graphql;
 import ballerina/graphql.dataloader;
@@ -41,12 +41,10 @@ service on new graphql:Listener(9090) {
 
     # Returns the list of users in the database.
     # + return - List of users
+    @graphql:ResourceConfig {
+        interceptors: new UserAuthInterceptor()
+    }
     resource function get users(graphql:Context context) returns User[]|error {
-        UserRecord|error user = context.get(USER).ensureType();
-        if user is error {
-            return error("Unauthorized operation");
-        }
-        check validateUserRole(user, "admin");
         datasource:Datasource datasource = check context.get(DATASOURCE).ensureType();
         stream<UserRecord, error?> userStream = check datasource->getUsers();
         return from UserRecord userRecord in userStream
@@ -78,15 +76,15 @@ service on new graphql:Listener(9090) {
     # + context - The GraphQL context
     # + reviewInput - The input values for the review
     # + return - The added review
+    @graphql:ResourceConfig {
+        interceptors: new UserAuthInterceptor()
+    }
     remote function addReview(graphql:Context context, ReviewInput reviewInput) returns Review|error {
         datasource:Datasource datasource = check context.get(DATASOURCE).ensureType();
-        UserRecord? user = check context.get(USER).ensureType();
-        if user is () {
-            return error("Unauthorized");
-        }
+        string userId = check context.get(USER_ID).ensureType();
         ReviewRecord reviewRecord = {
             id: uuid:createRandomUuid(),
-            userId: user.id,
+            userId,
             ...reviewInput
         };
         ReviewRecord|error result = datasource->addReview(reviewRecord);
@@ -102,13 +100,11 @@ service on new graphql:Listener(9090) {
     # + context - The GraphQL context
     # + movieInput - The input values for the movie
     # + return - The added movie
+    @graphql:ResourceConfig {
+        interceptors: new UserAuthInterceptor()
+    }
     remote function addMovie(graphql:Context context, MovieInput movieInput) returns Movie|error {
         datasource:Datasource datasource = check context.get(DATASOURCE).ensureType();
-        UserRecord? user = check context.get(USER).ensureType();
-        if user is () {
-            return error("Unauthorized");
-        }
-        check validateUserRole(user, "admin");
         MovieRecord movieRecord = {
             id: uuid:createRandomUuid(),
             ...movieInput
@@ -126,13 +122,11 @@ service on new graphql:Listener(9090) {
     # + context - The GraphQL context
     # + directorInput - The input values for the director
     # + return - The added director
+    @graphql:ResourceConfig {
+        interceptors: new UserAuthInterceptor()
+    }
     remote function addDirector(graphql:Context context, DirectorInput directorInput) returns Director|error {
         datasource:Datasource datasource = check context.get(DATASOURCE).ensureType();
-        UserRecord? user = check context.get(USER).ensureType();
-        if user is () {
-            return error("Unauthorized");
-        }
-        check validateUserRole(user, "admin");
         DirectorRecord directorRecord = {
             id: uuid:createRandomUuid(),
             ...directorInput
@@ -161,6 +155,7 @@ isolated function initContext(http:RequestContext requestContext, http:Request r
             return error("User not found");
         }
         context.set(USER, user);
+        context.set(USER_ID, userId);
     }
     context.registerDataLoader(DIRECTOR_LOADER, new dataloader:DefaultDataLoader(loadDirectors));
     context.registerDataLoader(MOVIE_LOADER, new dataloader:DefaultDataLoader(loadMovies));
