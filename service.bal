@@ -4,10 +4,6 @@ import ballerina/graphql;
 import ballerina/log;
 import ballerina/uuid;
 
-const string DATASOURCE = "datasource";
-const string USER = "user";
-const string USER_ID = "userId";
-
 configurable boolean enableGraphiql = false;
 configurable boolean enableIntrospection = false;
 configurable int maxQueryDepth = 4;

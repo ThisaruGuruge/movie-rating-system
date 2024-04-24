@@ -3,6 +3,10 @@ import ballerina/graphql.dataloader;
 import ballerina/http;
 import ballerina/log;
 
+const string DATASOURCE = "datasource";
+const string USER = "user";
+const string USER_ID = "userId";
+
 isolated function loadDirectors(readonly & anydata[] ids) returns DirectorRecord[]|error {
     string[] keys = check ids.ensureType();
     stream<DirectorRecord, error?> directorStream = check datasource->getDirectorsById(keys);
