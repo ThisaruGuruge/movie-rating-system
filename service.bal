@@ -1,8 +1,6 @@
 import movie_rating_system.datasource;
 
 import ballerina/graphql;
-import ballerina/graphql.dataloader;
-import ballerina/http;
 import ballerina/log;
 import ballerina/uuid;
 
@@ -63,7 +61,7 @@ service on new graphql:Listener(9090) {
     # Returns the Director with the given ID.
     # + id - The ID of the director
     # + return - The director with the given ID
-    resource function get director(graphql:Context context, string id) returns Director|error {
+    resource function get director(graphql:Context context, @graphql:ID string id) returns Director|error {
         datasource:Datasource datasource = check context.get(DATASOURCE).ensureType();
         DirectorRecord|error directorRecord = datasource->getDirector(id);
         if directorRecord is error {
@@ -139,25 +137,4 @@ service on new graphql:Listener(9090) {
         check context.invalidate("directors");
         return new (result);
     }
-}
-
-isolated function initContext(http:RequestContext requestContext, http:Request request) returns graphql:Context|error {
-    graphql:Context context = new;
-    context.set(DATASOURCE, datasource);
-
-    string|http:HeaderNotFoundError userId = request.getHeader(USER_ID);
-    if userId is http:HeaderNotFoundError {
-        context.set(USER, ());
-    } else {
-        UserRecord|error user = datasource->getUser(userId);
-        if user is error {
-            log:printError("User not found", user);
-            return error("User not found");
-        }
-        context.set(USER, user);
-        context.set(USER_ID, userId);
-    }
-    context.registerDataLoader(DIRECTOR_LOADER, new dataloader:DefaultDataLoader(loadDirectors));
-    context.registerDataLoader(MOVIE_LOADER, new dataloader:DefaultDataLoader(loadMovies));
-    return context;
 }

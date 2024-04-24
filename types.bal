@@ -263,11 +263,7 @@ readonly service class AdminAuthInterceptor {
     *graphql:Interceptor;
 
     isolated remote function execute(graphql:Context context, graphql:Field 'field) returns anydata|error {
-        UserRecord? user = check context.get(USER).ensureType();
-        if user is () {
-            return error("Unauthorized access to the resource");
-        }
-        check validateUserRole(user, "admin");
+        check validateUserRole(context, "admin");
         return context.resolve('field);
     }
 }
@@ -276,11 +272,7 @@ readonly service class UserAuthInterceptor {
     *graphql:Interceptor;
 
     isolated remote function execute(graphql:Context context, graphql:Field 'field) returns anydata|error {
-        UserRecord? user = check context.get(USER).ensureType();
-        if user is () {
-            return error("Unauthorized access to the resource");
-        }
-        check validateUserRole(user, "user");
+        check validateUserRole(context, "user");
         return context.resolve('field);
     }
 }
