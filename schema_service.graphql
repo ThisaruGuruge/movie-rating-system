@@ -1,0 +1,113 @@
+type Query {
+  "Returns the list of movies in the database."
+  movies: [Movie!]!
+  "Returns the list of users in the database."
+  users: [User!]!
+  "Returns the list of directors in the database."
+  directors: [Director!]!
+  "Returns the Director with the given ID."
+  director(
+    "The ID of the director"
+    id: String!
+  ): Director!
+}
+
+"Represents a Movie in the movie database."
+type Movie {
+  "The ID of the movie."
+  id: ID!
+  "The title of the movie."
+  title: String!
+  "The year the movie was released."
+  year: Int!
+  "The description of the movie."
+  description: String!
+  "The average rating of the movie."
+  rating: Float
+  "The director of the movie."
+  director: Director
+}
+
+"Represents a Director in the movie database."
+type Director {
+  "The ID of the director."
+  id: ID!
+  "The name of the director."
+  name: String!
+  "The biography of the director."
+  bio: String!
+  "The movies directed by the director."
+  movies: [Movie!]
+}
+
+"Represents a User in the movie database."
+type User {
+  "The ID of the user."
+  id: ID!
+  "The name of the user."
+  name: String
+  "The email of the user."
+  email: String
+}
+
+type Mutation {
+  "Adds a new review to the database."
+  addReview(
+    "The input values for the review"
+    reviewInput: ReviewInput!
+  ): Review!
+  "Adds a new movie to the database."
+  addMovie(
+    "The input values for the movie"
+    movieInput: MovieInput!
+  ): Movie!
+  "Adds a new director to the database."
+  addDirector(
+    "The input values for the director"
+    directorInput: DirectorInput!
+  ): Director!
+}
+
+"Represents a Review in the movie database."
+type Review {
+  "The ID of the review."
+  id: ID!
+  "The user who wrote the review."
+  user: User
+  "The movie that was reviewed."
+  movie: Movie
+  "The score given by the user."
+  score: Int!
+  "The description of the review."
+  description: String!
+}
+
+"Input type for adding a Movie Review."
+input ReviewInput {
+  "ID of the movie"
+  movieId: ID!
+  "Score given by the user. Should be between 1 and 5."
+  score: Int!
+  "Description of the review."
+  description: String!
+}
+
+"Input type for adding a Movie."
+input MovieInput {
+  "Title of the movie"
+  title: String!
+  "Year the movie was released"
+  year: Int!
+  "Description of the movie"
+  description: String!
+  "ID of the director"
+  directorId: ID!
+}
+
+"Input type for adding a Director."
+input DirectorInput {
+  "Name of the director"
+  name: String!
+  "Biography of the director"
+  bio: String!
+}
