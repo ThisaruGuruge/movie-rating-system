@@ -8,6 +8,10 @@ const string DIRECTOR_LOADER = "directorLoader";
 const string MOVIE_LOADER = "movieLoader";
 
 # Represents a Movie in the movie database.
+@display {
+    label: "Movie",
+    id: "movie"
+}
 isolated service class Movie {
     private final string id;
     private final string title;
@@ -67,6 +71,10 @@ isolated service class Movie {
 }
 
 # Represents a Director in the movie database.
+@display {
+    label: "Director",
+    id: "director"
+}
 public isolated service class Director {
     private final string id;
     private final string name;
@@ -106,6 +114,10 @@ public isolated service class Director {
 }
 
 # Represents a User in the movie database.
+@display {
+    label: "User",
+    id: "user"
+}
 public isolated service class User {
     private final string id;
     private final string name;
@@ -137,6 +149,10 @@ public isolated service class User {
 }
 
 # Represents a Review in the movie database.
+@display {
+    label: "Review",
+    id: "review"
+}
 public isolated service class Review {
     private final string id;
     private final string userId;
@@ -213,6 +229,10 @@ type ReviewRecord record {|
 |};
 
 # Input type for adding a Movie Review.
+@display {
+    label: "Review Input",
+    id: "review-input"
+}
 public type ReviewInput record {|
     # ID of the movie
     @graphql:ID
@@ -230,6 +250,10 @@ public type ReviewInput record {|
 |};
 
 # Input type for adding a Movie.
+@display {
+    label: "Movie Input",
+    id: "movie-input"
+}
 public type MovieInput record {|
     # Title of the movie
     string title;
@@ -246,6 +270,10 @@ public type MovieInput record {|
 |};
 
 # Input type for adding a Director.
+@display {
+    label: "Director Input",
+    id: "director-input"
+}
 public type DirectorInput record {|
     # Name of the director
     string name;

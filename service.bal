@@ -3,6 +3,8 @@ import movie_rating_system.datasource;
 import ballerina/graphql;
 import ballerina/log;
 import ballerina/uuid;
+import ballerinax/jaeger as _;
+import ballerinax/prometheus as _;
 
 configurable boolean enableGraphiql = false;
 configurable boolean enableIntrospection = false;
@@ -11,6 +13,10 @@ configurable boolean initDatabase = true;
 
 final datasource:Datasource datasource = check new (initDatabase);
 
+@display {
+    label: "Movie Rating System",
+    id: "movie-rating-system"
+}
 @graphql:ServiceConfig {
     graphiql: {
         enabled: enableGraphiql
@@ -22,7 +28,7 @@ final datasource:Datasource datasource = check new (initDatabase);
         enabled: true
     }
 }
-service on new graphql:Listener(9090) {
+service on new graphql:Listener(9091) {
 
     # Returns the list of movies in the database.
     # + return - List of movies

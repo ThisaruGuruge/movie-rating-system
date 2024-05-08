@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.9.0-20240419-152500-bd530dd2"
+distribution-version = "2201.9.0"
 
 [[package]]
 org = "ballerina"
@@ -64,7 +64,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "graphql"
-version = "1.12.0"
+version = "1.13.0"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -80,6 +80,7 @@ dependencies = [
 	{org = "ballerina", name = "log"},
 	{org = "ballerina", name = "mime"},
 	{org = "ballerina", name = "oauth2"},
+	{org = "ballerina", name = "observe"},
 	{org = "ballerina", name = "task"},
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "uuid"},
@@ -356,6 +357,19 @@ modules = [
 
 [[package]]
 org = "ballerinax"
+name = "jaeger"
+version = "0.5.0"
+dependencies = [
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "observe"}
+]
+modules = [
+	{org = "ballerinax", packageName = "jaeger", moduleName = "jaeger"}
+]
+
+[[package]]
+org = "ballerinax"
 name = "mongodb"
 version = "5.0.1"
 dependencies = [
@@ -365,6 +379,20 @@ dependencies = [
 ]
 modules = [
 	{org = "ballerinax", packageName = "mongodb", moduleName = "mongodb"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "prometheus"
+version = "0.3.0"
+dependencies = [
+	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "lang.string"},
+	{org = "ballerina", name = "observe"}
+]
+modules = [
+	{org = "ballerinax", packageName = "prometheus", moduleName = "prometheus"}
 ]
 
 [[package]]
@@ -379,7 +407,9 @@ dependencies = [
 	{org = "ballerina", name = "log"},
 	{org = "ballerina", name = "uuid"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "mongodb"}
+	{org = "ballerinax", name = "jaeger"},
+	{org = "ballerinax", name = "mongodb"},
+	{org = "ballerinax", name = "prometheus"}
 ]
 modules = [
 	{org = "thisaru", packageName = "movie_rating_system", moduleName = "movie_rating_system"},

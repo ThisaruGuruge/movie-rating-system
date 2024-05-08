@@ -167,3 +167,44 @@ Query GetMoviesByDirector {
     }
 }
 ```
+
+## Observability
+
+This example includes observability support from the built-in observability features in the Ballerina GraphQL package. To enable observability, follow the steps below.
+
+1. Add the following entry to the `Ballerina.toml` file.
+
+    ```toml
+    [build-options]
+    observabilityIncluded = true
+    ```
+
+    >**Note:** This is already enabled in the `Ballerina.toml` file in this repository.
+
+2. Add observability configurations to the `Config.toml` file.
+
+    ```toml
+    [ballerina.observe]
+    metricsEnabled=true
+    metricsReporter="prometheus"
+    tracingEnabled=true
+    tracingProvider="jaeger"
+
+    [ballerinax.prometheus]
+    port=9797
+    host="0.0.0.0"
+
+    [ballerinax.jaeger]
+    agentHostname="localhost"
+    agentPort=4317
+    samplerType="const"
+    samplerParam=1.0
+    reporterFlushInterval=2000
+    reporterBufferSize=1000
+    ```
+
+    For more information on observability in Ballerina, refer to the [Observe Ballerina Programs](https://ballerina.io/learn/observe-ballerina-programs/) guide.
+
+3. Start the Jaeger backend, Prometheus, and Grafana servers using Docker.
+
+    >**Note:** This repository includes a `docker-compose` file to start the Jaeger backend, Prometheus, and Grafana servers in the same `docker-compose` file with the `observability` network.
