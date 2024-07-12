@@ -32,8 +32,8 @@
         },
         {
             "id": "7",
-            "name": "David Fincher",
-            "bio": "David Fincher is an American film director, producer, and screenwriter. He is best known for directing the movies Fight Club, Se7en, The Social Network, and a number of music videos."
+            "name": "The Wachowskis",
+            "bio": "The Wachowskis are American film directors, writers, and producers. They are best known for directing the Matrix trilogy and the Netflix series Sense8."
         },
         {
             "id": "8",
@@ -44,6 +44,11 @@
             "id": "9",
             "name": "Quentin Tarantino",
             "bio": "Quentin Tarantino is an American film director, screenwriter, producer, and actor. He is best known for directing the movies Pulp Fiction, Reservoir Dogs, Kill Bill, and Django Unchained."
+        },
+        {
+            "id": "10",
+            "name": "David Fincher",
+            "bio": "David Fincher is an American film director, producer, and screenwriter. He is best known for directing the movies Fight Club, Se7en, The Social Network, and the Gone Girl."
         }
     ]
 }

@@ -59,6 +59,7 @@ isolated function initContext(http:RequestContext requestContext, http:Request r
 
     string|http:HeaderNotFoundError userId = request.getHeader(USER_ID);
     if userId is http:HeaderNotFoundError {
+        log:printWarn("User not logged in");
         context.set(USER, ());
     } else {
         UserRecord|error user = datasource->getUser(userId);
@@ -72,4 +73,12 @@ isolated function initContext(http:RequestContext requestContext, http:Request r
     context.registerDataLoader(DIRECTOR_LOADER, new dataloader:DefaultDataLoader(loadDirectors));
     context.registerDataLoader(MOVIE_LOADER, new dataloader:DefaultDataLoader(loadMovies));
     return context;
+}
+
+isolated function getUserIdFromContext(graphql:Context context) returns string|error {
+    string|error userId = context.get(USER_ID).ensureType();
+    if userId is error {
+        return error("User is not logged in");
+    }
+    return userId;
 }

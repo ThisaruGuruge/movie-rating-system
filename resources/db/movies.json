@@ -131,7 +131,7 @@
             "title": "The Social Network",
             "year": 2010,
             "description": "As Harvard student Mark Zuckerberg creates the social networking site that would become known as Facebook, he is sued by the twins who claimed he stole their idea, and by the co-founder who was later squeezed out of the business.",
-            "directorId": "7"
+            "directorId": "10"
         },
         {
             "id": "20",
@@ -188,6 +188,20 @@
             "year": 2009,
             "description": "A group of U.S. soldiers sneaks behind enemy lines to kill Hitler",
             "directorId": "9"
+        },
+        {
+            "id": "28",
+            "title": "Se7en",
+            "year": 1995,
+            "description": "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
+            "directorId": "10"
+        },
+        {
+            "id": "29",
+            "title": "Fight Club",
+            "year": 1999,
+            "description": "An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much, much more.",
+            "directorId": "10"
         }
     ]
 }

@@ -6,12 +6,17 @@ import ballerina/uuid;
 import ballerinax/jaeger as _;
 import ballerinax/prometheus as _;
 
+import xlibb/pubsub;
+
+const MOVIE_TOPIC = "movies";
+
 configurable boolean enableGraphiql = false;
 configurable boolean enableIntrospection = false;
 configurable int maxQueryDepth = 4;
 configurable boolean initDatabase = true;
 
 final datasource:Datasource datasource = check new (initDatabase);
+final pubsub:PubSub pubsub = new;
 
 @display {
     label: "Movie Rating System",
@@ -25,7 +30,8 @@ final datasource:Datasource datasource = check new (initDatabase);
     maxQueryDepth,
     contextInit: initContext,
     cacheConfig: {
-        enabled: true
+        enabled: true,
+        maxSize: 200
     }
 }
 service on new graphql:Listener(9091) {
@@ -81,7 +87,7 @@ service on new graphql:Listener(9091) {
     }
     remote function addReview(graphql:Context context, ReviewInput reviewInput) returns Review|error {
         datasource:Datasource datasource = check context.get(DATASOURCE).ensureType();
-        string userId = check context.get(USER_ID).ensureType();
+        string userId = check getUserIdFromContext(context);
         ReviewRecord reviewRecord = {
             id: uuid:createRandomUuid(),
             userId,
@@ -114,8 +120,10 @@ service on new graphql:Listener(9091) {
             log:printError("Failed to add the movie", result);
             return error("Failed to add the movie");
         }
+        Movie movie = new (result);
+        check pubsub.publish(MOVIE_TOPIC, movie, -1);
         check context.invalidate("movies");
-        return new (result);
+        return movie;
     }
 
     # Adds a new director to the database.
@@ -138,5 +146,11 @@ service on new graphql:Listener(9091) {
         }
         check context.invalidate("directors");
         return new (result);
+    }
+
+    # Subscribes to the movies, to get updates when a new movie is published.
+    # + return - A stream of movies
+    isolated resource function subscribe movies(string userId) returns stream<Movie, error?>|error {
+        return pubsub.subscribe(MOVIE_TOPIC, 10);
     }
 }
